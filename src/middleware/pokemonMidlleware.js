@@ -18,7 +18,7 @@ const getApiPokemon = async () => {
             height: e.data.height,
             weight: e.data.weight,
             img: e.data.sprites.other.home.front_default,
-             types: e.data.types.length < 2 ? [{name: e.data.types[0].type.name}] : [{name: e.data.types[0].type.name}, {name: e.data.types[1].type.name}],
+            type: e.data.types.length < 2 ? [{name: e.data.types[0].type.name}] : [{name: e.data.types[0].type.name}, {name: e.data.types[1].type.name}],
             //type: e.data.types.map(e => e.type.name)
         }
     }))
