@@ -18,7 +18,8 @@ const getApiPokemon = async () => {
             height: e.data.height,
             weight: e.data.weight,
             img: e.data.sprites.other.home.front_default,
-            type: e.data.types.map(e => e.type.name)
+             types: e.data.types.length < 2 ? [{name: e.data.types[0].type.name}] : [{name: e.data.types[0].type.name}, {name: e.data.types[1].type.name}],
+            //type: e.data.types.map(e => e.type.name)
         }
     }))
     return pokemons
@@ -27,7 +28,7 @@ const getApiPokemon = async () => {
 const getBdPokemon = async () => {
 
     try {
-        return await Pokemon.findAll({
+        const bd =  await Pokemon.findAll({
             include: {
                 model: Type,
                 attributes: ['name'],
@@ -36,6 +37,7 @@ const getBdPokemon = async () => {
                 }
             }
         })
+         return bd;
     } catch (error) {
         console.log(error);
     }
