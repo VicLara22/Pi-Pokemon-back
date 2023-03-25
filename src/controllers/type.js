@@ -16,7 +16,7 @@ const getAllTypes = async ( req, res ) => {
     } else {
         res.status(200).send(typeDb);
 }
-
+}
 module.exports = {
     getAllTypes
 }
