@@ -6,7 +6,7 @@ const getAllPokemons = async (req, res, next) => {
     const allPokemons = await getAllPokemon()
     try {
         if (name) {
-            const pokemonName = allPokemons.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
+            const pokemonName = allPokemons?.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
             if (pokemonName) {
                 return res.status(200).json(pokemonName)
             } else {
@@ -24,7 +24,7 @@ const getById = async (req, res, next) => {
     const allPokemons = await getAllPokemon()
     try {
         if (id) {
-            const pokemonID = await allPokemons.filter(e => e.id == id)
+            const pokemonID = await allPokemons?.filter(e => e.id == id)
             pokemonID ?
                 res.status(200).json(pokemonID) :
                 res.status(404).send('Sorry, that Pokemon does not exist.')
