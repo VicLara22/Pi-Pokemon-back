@@ -30,7 +30,6 @@ const getBdPokemon = async () => {
         const bd =  await Pokemon.findAll({
             include: {
                 model: Type,
-                as: 'types',
                 attributes: ['name'],
                 through: {
                     attributes: []
