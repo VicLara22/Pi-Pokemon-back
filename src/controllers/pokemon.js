@@ -41,8 +41,7 @@ const addPokemon = async (req, res, next) => {
     try {
         if (name) {
             const pokemonCreated = await Pokemon.create({ name, life, attack, defense, speed, height, weight, img, createBD });
-            const typesdb = await Type.findAll({
-                where: { name: type }
+            const typesdb = await Type.create({name: type })); 
             })
             pokemonCreated.addType(typesdb)
             return res.status(200).json(pokemonCreated)
