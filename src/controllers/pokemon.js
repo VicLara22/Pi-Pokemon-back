@@ -41,15 +41,21 @@ const addPokemon = async (req, res, next) => {
     try {
         if (name) {
             const pokemonCreated = await Pokemon.create({ name, life, attack, defense, speed, height, weight, img, createBD });
-            const typesdb = await Type.create({name: type })); 
+       }
+       if(type){
+            const typesdb = await Type.findAll({
+            where: { name: type }
             })
+           
             pokemonCreated.addType(typesdb)
-            return res.status(200).json(pokemonCreated)
-        } else {
-            return res.status(404).send('Pokemon no creado')
-        }
+        
+           
+            } 
+        else return res.status(400).json({ msg: 'Es necesario ingresar un tipo' });
+        
+        res.json({ msg: "Pokémon creado con éxito" });
     } catch (error) {
-        return next({ message: 'Could not Create Pokemon!', status: 400 })
+      next(error);
     }
 };
 
