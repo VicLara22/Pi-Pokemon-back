@@ -7,7 +7,7 @@ const getAllTypes = async ( req, res ) => {
         try {
             const typesUrl = await axios.get("https://pokeapi.co/api/v2/type"); 
             const types = typesUrl.data.results.map(t => t.name);
-            const typesC = types?.map(async t => await Type.create({name: t })); 
+            const typesC = types?.map(async t => await Type.create({ name: t})); 
             const allTypes = await Type.findAll();
             res.status(200).send(allTypes); 
         } catch (error) {
