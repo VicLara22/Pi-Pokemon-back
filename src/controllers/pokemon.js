@@ -3,11 +3,12 @@ const { Pokemon, Type } = require('../db')
 
 const getAllPokemons = async (req, res, next) => {
     const { name } = req.query
-    const allPokemons = await getAllPokemon()
+ 
     try {
+           const allPokemons = await getAllPokemon()
         if (name) {
-            const pokemonName = allPokemons?.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
-            if (pokemonName) {
+            const pokemonName = allPokemons.filter(e => e.name.toLowerCase().includes(name.toLowerCase()))
+            if (pokemonName.length > 0) {
                 return res.status(200).json(pokemonName)
             } else {
                 return res.status(400).send('Sorry, that Pokemon does not exist')
@@ -21,13 +22,15 @@ const getAllPokemons = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
     const { id } = req.params
-    const allPokemons = await getAllPokemon()
     try {
+     const allPokemons = await getAllPokemon()
         if (id) {
-            const pokemonID = await allPokemons?.filter(e => e.id == id)
-            pokemonID ?
-                res.status(200).json(pokemonID) :
-                res.status(404).send('Sorry, that Pokemon does not exist.')
+            const pokemonID = await allPokemons.filter(e => e.id == id)
+         if (pokemonID.length > 0) {
+                res.status(200).json(pokemonID);
+            } else {
+                res.status(404).send('Sorry, that Pokemon does not exist.');
+            }
         }
     } catch (error) {
         next(error)
@@ -39,19 +42,20 @@ const addPokemon = async (req, res, next) => {
 
     const { name, life, attack, defense, speed, height, weight, img, createBD, type } = req.body;
     try {
-        if (name) {
+        if (!name) {
+             return res.status(400).json({ msg: 'Es necesario ingresar un nombre' });
+        }
             const pokemonCreated = await Pokemon.create({ name, life, attack, defense, speed, height, weight, img, createBD });
-       }
+       
        if(type){
             const typesdb = await Type.findAll({
             where: { name: type }
             })
-           
-            pokemonCreated.addType(typesdb)
-        
-           
+          await pokemonCreated.addType(typesdb);
             } 
-        else return res.status(400).json({ msg: 'Es necesario ingresar un tipo' });
+        else  {
+            return res.status(400).json({ msg: 'Es necesario ingresar un tipo' });
+        }
         
         res.json({ msg: "Pokémon creado con éxito" });
     } catch (error) {
