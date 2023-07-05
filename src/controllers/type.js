@@ -2,23 +2,25 @@ const { Type } = require('../db');
 const axios = require('axios');
 
 const getAllTypes = async ( req, res ) => {
-    const typeDb = await Type.findAll();
-    if(!typeDb.length) {
         try {
+  let typeDb = await Type.findAll();
+    if(!typeDb.length) {
             const typesUrl = await axios.get("https://pokeapi.co/api/v2/type"); 
             const types = typesUrl.data.results.map(t => t.name);
-            const typesC = types?.map(async t => await Type.create({ name: t})); 
-            const allTypes = await Type.findAll();
-            res.status(200).send(allTypes); 
+            const createdTypes = await Promise.all(types.map(async t => {
+                return await Type.create({ name: t });
+            }));
+            typesDb = createdTypes;
+        }
+            res.status(200).send(typesDb); 
         } catch (error) {
-            res.status(404).send({error: "error"});
+           res.status(500).send({ error: "Internal Server Error" });
         }; 
-    } else {
-        res.status(200).send(typeDb);
-}
+      
 }
 module.exports = {
     getAllTypes
 }
+
         
 
